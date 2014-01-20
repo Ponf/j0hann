@@ -2,7 +2,7 @@ require 'jira'
 require 'rss'
 require 'set'
 require 'uri'
-require './jira-utils.rb'
+require_relative 'jira-utils.rb'
 
 unless ARGV.length==2
     puts "Usage: #{File.basename($0)} <jira-user> <jira-password>"
@@ -20,18 +20,25 @@ items = [].to_set
 while 1 do
     open(uri,:http_basic_authentication=>[ARGV[0],ARGV[1]]) do |rss|
         feed = RSS::Parser.parse(rss,false)
-        received_set = feed.items.map { |item| { 
+        received_set = feed.items.map { |item| 
+                                               item.author ||= "<no author>"
+                                               item.title  ||= "<no title>"
+                                               item.link   ||= "<no link>"
+                                               { 
                                                  :author => item.author, 
                                                  :title => item.title, 
                                                  :link => item.link, 
                                                } 
                                       }.to_set
-        unless items.length==0
+        unless items.length == 0
             diff = received_set - items
-            unless diff.length==0
+            unless diff.length == 0
                 diff.each { |item|
-	            jira_issue = JiraUtil.issue_info(JiraUtil.extract_issue_id(item[:title]))
-		    next unless jira_issue
+	                jira_issue = JiraUtil.issue_info(JiraUtil.extract_issue_id(item[:title]))
+		            unless jira_issue
+                        puts "Failed to get jira issue for #{item}"
+                        next
+                    end
                     # We may get OLD tasks here in case of task deletion.
                     # Filtering them.
                     if Time.now - jira_issue[:created] < 60*60 
