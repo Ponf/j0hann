@@ -23,8 +23,8 @@ if task_id = JiraUtils.extract_issue_id(commit_description)
     task_link = JiraUtils.issue_uri_str(task_id)
     task_info = JiraUtils.issue_info(task_id)
 
-    message = " ".color(:blue)+"[gerrit][comment]".bold
-    message += " #{author} #{comment} | #{commit_author} #{change_url} #{task_link} #{task_info[:summary]}"
+    message = "_".color(:blue,:blue)+"[gerrit][comment]".bold
+    message += " #{comment.gsub("\n"," ")} | by #{author} | #{commit_author} #{change_url} #{task_link} #{task_info[:summary]}"
 
     IRCUtils.post(message)
 end

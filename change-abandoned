@@ -8,7 +8,7 @@ change_url   = ARGV[ARGV.index('--change-url')+1]
 project_name = ARGV[ARGV.index('--project')+1]
 abandoner    = ARGV[ARGV.index('--abandoner')+1]
 
-message = " ".color(:purple)+"[gerrit][abandoned]".bold
+message = "_".color(:purple,:purple)+"[gerrit][abandoned]".bold
 message += " #{abandoner} #{change_url}"
 
 IRCUtils.post(message)

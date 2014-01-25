@@ -20,7 +20,7 @@ if task_id = JiraUtils.extract_issue_id(commit_description)
     task_link = JiraUtils.issue_uri_str(task_id)
     task_info = JiraUtils.issue_info(task_id)
 
-    message = " ".color(:green)+"[gerrit][merge]".bold
+    message = "_".color(:green,:green)+"[gerrit][merge]".bold
     message += " #{commit_author} #{change_url} #{task_link} #{task_info[:summary]}"
 
     IRCUtils.post(message)

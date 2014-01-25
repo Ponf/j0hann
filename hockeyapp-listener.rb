@@ -38,7 +38,7 @@ while 1
                 diff.each { |r|
                     
                     crash_url = "https://rink.hockeyapp.net/manage/apps/#{r["app_id"]}/crash_reasons/#{r["id"]}"
-                    message = " ".color(:brown)+"[hockeyapp][crash-group]".bold
+                    message = "_".color(:brown,:brown)+"[hockeyapp][crash-group]".bold
                     message += " #{app_name} #{r["version"]} #{r["file"]}:#{r["line"]} #{r["reason"]} #{crash_url}"
 
                     IRCUtils.post(message)

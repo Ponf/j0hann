@@ -43,7 +43,7 @@ while 1 do
                     # We may get OLD tasks here in case of task deletion.
                     # Filtering them.
                     if Time.now - jira_issue[:created] < 60*60 
-                        message = " ".color(:orange)+"[jira][new-issue]".bold
+                        message = "_".color(:orange,:oragne)+"[jira][new-issue]".bold
                         message += " #{item[:author]} #{item[:title]} #{item[:link]}"
 
                         IRCUtils.post(message)
