@@ -35,7 +35,7 @@ while 1 do
             diff = received_set - items
             unless diff.length == 0
                 diff.each { |item|
-	                jira_issue = JiraUtil.issue_info(JiraUtil.extract_issue_id(item[:title]))
+	                jira_issue = JiraUtils.issue_info(JiraUtils.extract_issue_id(item[:title]))
 		            unless jira_issue
                         puts "Failed to get jira issue for #{item}"
                         next
@@ -44,7 +44,7 @@ while 1 do
                     # Filtering them.
                     if Time.now - jira_issue[:created] < 60*60 
                         message = " ".color(:orange)+"[jira][new-issue]".bold
-                        message += "#{item[:author]} #{item[:title]} #{item[:link]}"
+                        message += " #{item[:author]} #{item[:title]} #{item[:link]}"
 
                         IRCUtils.post(message)
                     end
@@ -53,5 +53,5 @@ while 1 do
         end
         items = received_set
     end
-    sleep 10
+    sleep 60
 end

@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require 'net/http'
+require 'uri'
+require_relative 'irc-utils.rb'
+
+change_url   = ARGV[ARGV.index('--change-url')+1]
+project_name = ARGV[ARGV.index('--project')+1]
+abandoner    = ARGV[ARGV.index('--abandoner')+1]
+
+message = " ".color(:purple)+"[gerrit][abandoned]".bold
+message += " #{abandoner} #{change_url}"
+
+IRCUtils.post(message)

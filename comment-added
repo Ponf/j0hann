@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'uri'
+require 'jira'
+require 'net/http'
+require_relative 'jira-utils.rb'
+require_relative 'irc-utils.rb'
+
+change_url   = ARGV[ARGV.index('--change-url')+1]
+project_name = ARGV[ARGV.index('--project')+1]
+commit       = ARGV[ARGV.index('--commit')+1]
+is_draft     = ARGV[ARGV.index('--is-draft')+1]
+comment      = ARGV[ARGV.index('--comment')+1]
+author       = ARGV[ARGV.index('--author')+1]
+
+commit_description = `git log #{commit}^..#{commit}`.strip
+commit_author = `git log --format=%an #{commit}^..#{commit}`.strip
+
+if task_id = JiraUtils.extract_issue_id(commit_description)
+    task_link = JiraUtils.issue_uri_str(task_id)
+    task_info = JiraUtils.issue_info(task_id)
+
+    message = " ".color(:blue)+"[gerrit][comment]".bold
+    message += " #{author} #{comment} | #{commit_author} #{change_url} #{task_link} #{task_info[:summary]}"
+
+    IRCUtils.post(message)
+end
+

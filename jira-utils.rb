@@ -1,4 +1,4 @@
-class JiraUtil
+class JiraUtils
 	@@username = ""
 	@@password = ""
 
@@ -26,9 +26,9 @@ class JiraUtil
 	    "https://jira.mail.ru/browse/#{issue_id}"
 	end
 
-        def self.extract_issue_id(str)
-            str[/[a-z]+-[1-9][0-9]+/i]
-        end
+    def self.extract_issue_id(str)
+        str[/[a-z]+-[1-9][0-9]+/i]
+    end
 
 	def self.issue_info(issue_id)
            return nil unless issue_id
