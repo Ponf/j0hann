@@ -25,7 +25,7 @@ class String
     end
     
     def bold
-        "\x02#{self}\x02"
+        "\x02#{self}\x0F"
     end
 end
 module IRCUtils
