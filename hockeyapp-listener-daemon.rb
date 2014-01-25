@@ -7,4 +7,4 @@ options = {
     :log_output => true
 }
 
-Daemons.run('hockeyapp-webhook.rb', options)
+Daemons.run('hockeyapp-listener.rb', options)
