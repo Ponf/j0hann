@@ -10,8 +10,8 @@ unless ARGV.length==2
     exit(1)
 end
 
-JiraUtil.username=ARGV[0]
-JiraUtil.password=ARGV[1]
+JiraUtils.username=ARGV[0]
+JiraUtils.password=ARGV[1]
 
 uri = URI("https://jira.mail.ru/sr/jira.issueviews:searchrequest-rss/temp/SearchRequest.xml")
 uri.query = URI.encode_www_form("jqlQuery" => "project = \"Почта iOS\" ORDER BY created DESC", "tempMax" => 50)

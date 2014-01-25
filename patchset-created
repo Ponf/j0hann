@@ -6,6 +6,9 @@ require 'jira'
 require_relative 'jira-utils.rb'
 require_relative 'irc-utils.rb'
 
+JiraUtils.username = ""
+JiraUtils.password = ""
+
 change_url   = ARGV[ARGV.index('--change-url')+1]
 project_name = ARGV[ARGV.index('--project')+1]
 commit       = ARGV[ARGV.index('--commit')+1]
