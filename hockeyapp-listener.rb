@@ -3,6 +3,7 @@ require 'net/http'
 require 'set'
 require 'uri'
 require 'open-uri'
+require_relative 'irc-utils.rb'
 
 HOCKEYAPP_TOKEN=""
 APP_INFOS=[
@@ -37,12 +38,10 @@ while 1
                 diff.each { |r|
                     
                     crash_url = "https://rink.hockeyapp.net/manage/apps/#{r["app_id"]}/crash_reasons/#{r["id"]}"
-                    message = "[hockeyapp][crash-group] #{app_name} #{r["version"]} #{r["file"]}:#{r["line"]} #{r["reason"]} #{crash_url}"
+                    message = " ".color(:brown)+"[hockeyapp][crash-group]".bold
+                    message += "#{app_name} #{r["version"]} #{r["file"]}:#{r["line"]} #{r["reason"]} #{crash_url}"
 
-                    irc_hook_uri = URI("http://johann.mail.msk:8667/post")
-                    irc_hook_uri.query = URI.encode_www_form("channel" => "#mailru-ios-mail", "message" => message)
-
-                    Net::HTTP.get(irc_hook_uri)
+                    IRCUtils.post(message)
                 }
             end
             cache[app_id] = reports

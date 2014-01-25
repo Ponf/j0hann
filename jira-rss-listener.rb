@@ -3,6 +3,7 @@ require 'rss'
 require 'set'
 require 'uri'
 require_relative 'jira-utils.rb'
+require_relative 'irc-utils.rb'
 
 unless ARGV.length==2
     puts "Usage: #{File.basename($0)} <jira-user> <jira-password>"
@@ -42,12 +43,10 @@ while 1 do
                     # We may get OLD tasks here in case of task deletion.
                     # Filtering them.
                     if Time.now - jira_issue[:created] < 60*60 
-                        message = "[jira][new-issue] #{item[:author]} #{item[:title]} #{item[:link]}"
+                        message = " ".color(:orange)+"[jira][new-issue]".bold
+                        message += "#{item[:author]} #{item[:title]} #{item[:link]}"
 
-                        irc_hook_uri = URI("http://johann.mail.msk:8667/post")
-                        irc_hook_uri.query = URI.encode_www_form("channel" => "#mailru-ios-mail", "message" => message)
-
-                        Net::HTTP.get(irc_hook_uri)
+                        IRCUtils.post(message)
                     end
                 }
             end
