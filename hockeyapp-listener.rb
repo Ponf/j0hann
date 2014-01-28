@@ -34,7 +34,7 @@ while 1
                                                                     }
                                                                 }
             unless cache[app_id].length == 0
-                diff = cache[app_id] - reports
+                diff = reports - cache[app_id]
                 diff.each { |r|
                     
                     crash_url = "https://rink.hockeyapp.net/manage/apps/#{r["app_id"]}/crash_reasons/#{r["id"]}"
