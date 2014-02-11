@@ -10,6 +10,7 @@ APP_INFOS=[
               {
                   "name" => "",
                   "id" => ""
+                  #"version" => ""    #optional  
               },
           ]
 
@@ -18,9 +19,16 @@ while 1
     APP_INFOS.each { |app_info|
         app_name = app_info["name"]
         app_id = app_info["id"]
+        app_version = app_info["version"]
 
         cache[app_id] ||= [].to_set
-        hockey_uri_str = "https://rink.hockeyapp.net/api/2/apps/#{app_id}/crash_reasons?symbolicated=1&page=1&order=desc&per_page=100"
+
+        if app_version.nil? || app_version.length == 0
+        	hockey_uri_str = "https://rink.hockeyapp.net/api/2/apps/#{app_id}/crash_reasons?symbolicated=1&page=1&order=desc&per_page=100"
+        else
+        	hockey_uri_str = "https://rink.hockeyapp.net/api/2/apps/#{app_id}/app_versions/#{app_version}/crash_reasons?symbolicated=1&page=1&order=desc&per_page=100"
+        end
+
         open(hockey_uri_str,"X-HockeyAppToken" => HOCKEYAPP_TOKEN) { |f|
             response = f.read
             reports = JSON.parse(response)["crash_reasons"].map { |cr|
@@ -36,7 +44,6 @@ while 1
             unless cache[app_id].length == 0
                 diff = reports - cache[app_id]
                 diff.each { |r|
-                    
                     crash_url = "https://rink.hockeyapp.net/manage/apps/#{r["app_id"]}/crash_reasons/#{r["id"]}"
                     message = "_".color(:brown,:brown)+"[hockeyapp][crash-group]".bold
                     message += " #{app_name} #{r["version"]} #{r["file"]}:#{r["line"]} #{r["reason"]} #{crash_url}"
